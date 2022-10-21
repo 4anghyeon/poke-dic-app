@@ -2,6 +2,7 @@ import { AppBar, Box, Grid, Toolbar } from "@mui/material";
 import React from "react";
 import SearchBar from "./SearchBar";
 import classes from "./header.module.css";
+import DetailSearchBar from "./DetailSearchBar";
 
 function Header() {
   return (
@@ -32,13 +33,27 @@ function Header() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                borderBottom: "1px solid #495057",
               }}
+              className={classes.searchBar}
             >
               <SearchBar />
             </Grid>
           </Grid>
         </Toolbar>
+        <Toolbar>
+          <DetailSearchBar />
+        </Toolbar>
       </AppBar>
+      <Grid
+        item
+        className={classes.bottom}
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        <Box className={`${classes.close}`}>
+          <span>닫기</span>
+        </Box>
+      </Grid>
     </Box>
   );
 }

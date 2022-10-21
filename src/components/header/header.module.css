@@ -1,11 +1,31 @@
-h1 {
+.toolBar h1 {
     width: fit-content;
 }
 
-div {
+.toolBar div, .close div {
     background: #393939
 }
 
 .toolBar img {
     margin-right: 10px;
+}
+
+.searchBar div {
+    background: black;
+}
+
+.bottom span {
+    padding-bottom: 5px;
+    border-bottom: 3px solid #495057;
+}
+
+.bottom div {
+    width: 80px;
+    color: white;
+    text-align: center;
+    padding-bottom: 10px;
+    background:linear-gradient(-70deg, transparent 15px, #393939 0) right,
+    linear-gradient(70deg, transparent 15px, #393939 0) left;
+    background-size:50% 100%;
+    background-repeat:no-repeat;
 }
