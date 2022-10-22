@@ -1,6 +1,19 @@
-.container .close {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.container {
+    padding-left: 24px;
+    padding-right: 24px;
+}
+.container .detail {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.open {
+    height: 200px;
+    transition: all 0.3s ease;
+}
+
+.close {
+    height: 0;
+    overflow: hidden;
+    transition: all 0.3s;
 }

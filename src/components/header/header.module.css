@@ -15,11 +15,11 @@
 }
 
 .bottom span {
+    border-bottom: 2px solid #868e96;
     padding-bottom: 5px;
-    border-bottom: 3px solid #495057;
 }
 
-.bottom div {
+.bottom button {
     width: 80px;
     color: white;
     text-align: center;
@@ -28,4 +28,7 @@
     linear-gradient(70deg, transparent 15px, #393939 0) left;
     background-size:50% 100%;
     background-repeat:no-repeat;
+    border: none;
+    cursor: pointer;
+    padding-top: 4px;
 }

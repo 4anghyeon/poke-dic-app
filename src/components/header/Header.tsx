@@ -1,14 +1,24 @@
-import { AppBar, Box, Grid, Toolbar } from "@mui/material";
-import React from "react";
+import { AppBar, Box, Button, Grid, Toolbar } from "@mui/material";
+import React, { useRef, useState } from "react";
 import SearchBar from "./SearchBar";
 import classes from "./header.module.css";
 import DetailSearchBar from "./DetailSearchBar";
 
 function Header() {
+  const [showDetail, setShowDetail] = useState(false);
+
+  const onClickDetailToggleHandler = () => {
+    setShowDetail(!showDetail);
+  };
+
   return (
     <Box>
-      <AppBar position="static" className={classes.toolBar}>
-        <Toolbar>
+      <AppBar
+        position="static"
+        className={classes.toolBar}
+        sx={{ background: "transparent" }}
+      >
+        <Toolbar sx={{ pb: 2 }}>
           <Grid container>
             <Grid
               item
@@ -41,19 +51,16 @@ function Header() {
             </Grid>
           </Grid>
         </Toolbar>
-        <Toolbar>
-          <DetailSearchBar />
-        </Toolbar>
+        <DetailSearchBar showDetail={showDetail} />
       </AppBar>
-      <Grid
-        item
+      <Box
         className={classes.bottom}
-        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+        sx={{ display: "flex", justifyContent: "center" }}
       >
-        <Box className={`${classes.close}`}>
-          <span>닫기</span>
-        </Box>
-      </Grid>
+        <button onClick={onClickDetailToggleHandler}>
+          <span>{showDetail ? "닫기" : "열기"}</span>
+        </button>
+      </Box>
     </Box>
   );
 }
