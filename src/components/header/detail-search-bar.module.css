@@ -35,7 +35,8 @@
 }
 
 .dropdownBox {
-    width: 90%;
+    width: 100%;
+    top: 100%;
     border: 1px solid white;
     display: flex;
     justify-content: center;
@@ -43,6 +44,7 @@
     border-top: 0;
     background: #393939;
     color: white;
+    z-index: 3;
 }
 
 .dropdownBox input {
