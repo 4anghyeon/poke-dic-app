@@ -99,3 +99,7 @@
 .dropdownBox div:hover {
     background: #495057;
 }
+
+.dropdownBox .selected {
+    background: #495057 !important;
+}

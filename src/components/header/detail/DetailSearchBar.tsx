@@ -4,29 +4,23 @@ import { Box, Grid } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TypeCard from "./TypeCard";
 import LocationType from "../../../dataTypes/LocationType";
+import translater from "../../../translater";
+import { getLocation } from "../../../api/pokeApi";
 
-const getLocation = async () => {
-  let result: LocationType[] = [];
-  await fetch("https://pokeapi.co/api/v2/region/")
-    .then((res) => res.json())
-    .then((data) => {
-      if (data) {
-        console.log(data);
-        result = data.results.map((d: LocationType) => {
-          return {
-            name: d.name,
-          };
-        });
-      }
-    });
-
-  return result;
-};
+// 지방 리스트 불러오기 API
 
 function DetailSearchBar(props: { showDetail: boolean }) {
   const [showCharacter, setShowCharacter] = useState(false);
   const [showLocation, setShowLocation] = useState(false);
   const [showDicNo, setShowDicNo] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState("all");
+  const [locationList, setLocationList] = useState<LocationType[]>([
+    {
+      key: "all",
+      name: "전체",
+    },
+  ]);
+
   const characterDropdownRef = useRef<HTMLDivElement>(null);
   const locationDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -36,14 +30,15 @@ function DetailSearchBar(props: { showDetail: boolean }) {
     "테스트",
   ]);
 
-  const [locationList, setLocationList] = useState<LocationType[]>([]);
-
+  // 지방 리스트 불러오기
   useEffect(() => {
     getLocation().then((data) => {
-      setLocationList(data);
+      setLocationList((prev) => [...prev, ...data]);
+      console.log(locationList);
     });
   }, []);
 
+  // 드롭다운 바깥 클릭시 자동 닫힘
   useEffect(() => {
     function handleClickOutside(e: MouseEvent): void {
       if (
@@ -83,7 +78,6 @@ function DetailSearchBar(props: { showDetail: boolean }) {
 
   // 지방 드롭다운 열고 닫기
   const onClickShowLocationHandler = () => {
-    console.log(locationList);
     setShowCharacter(false);
     setShowLocation(!showLocation);
   };
@@ -100,6 +94,12 @@ function DetailSearchBar(props: { showDetail: boolean }) {
     e: React.MouseEvent<HTMLElement>
   ) => {
     e.stopPropagation();
+  };
+
+  // 지방 선택
+  const selectLocationHandler = (location: string) => {
+    setSelectedLocation(location);
+    setShowLocation(false);
   };
 
   return (
@@ -183,7 +183,9 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                 ref={locationDropdownRef}
                 onClick={onClickShowLocationHandler}
               >
-                <span style={{ width: "100%", textAlign: "center" }}>전체</span>
+                <span style={{ width: "100%", textAlign: "center" }}>
+                  {translater.get(selectedLocation)}
+                </span>
                 <ExpandMoreIcon
                   style={{ float: "right", paddingRight: "10px" }}
                 />
@@ -210,10 +212,14 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                             item
                             xs={12}
                             md={12}
-                            key={l.name}
+                            key={l.key}
                             sx={{ display: "flex", justifyContent: "center" }}
+                            className={
+                              selectedLocation === l.key ? classes.selected : ""
+                            }
+                            onClick={() => selectLocationHandler(l.key)}
                           >
-                            <span key={l.name}>{l.name}</span>
+                            <span>{l.name}</span>
                           </Grid>
                         );
                       })}
