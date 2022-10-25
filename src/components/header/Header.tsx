@@ -2,7 +2,7 @@ import { AppBar, Box, Button, Grid, Toolbar } from "@mui/material";
 import React, { useRef, useState } from "react";
 import SearchBar from "./SearchBar";
 import classes from "./header.module.css";
-import DetailSearchBar from "./DetailSearchBar";
+import DetailSearchBar from "./detail/DetailSearchBar";
 
 function Header() {
   const [showDetail, setShowDetail] = useState(false);
