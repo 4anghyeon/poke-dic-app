@@ -1,40 +1,50 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import classes from "./detail-search-bar.module.css";
-import { Box, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TypeCard from "./TypeCard";
-import LocationType from "../../../dataTypes/LocationType";
-import translater from "../../../translater";
-import { getLocation } from "../../../api/pokeApi";
+import RegionType from "../../../dataTypes/RegionType";
+import translator from "../../../translator";
+import { getAbilities, getRegionList } from "../../../api/pokeApi";
+import { AbilityType } from "../../../dataTypes/AbilityType";
 
 // 지방 리스트 불러오기 API
 
 function DetailSearchBar(props: { showDetail: boolean }) {
-  const [showCharacter, setShowCharacter] = useState(false);
-  const [showLocation, setShowLocation] = useState(false);
-  const [showDicNo, setShowDicNo] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState("all");
-  const [locationList, setLocationList] = useState<LocationType[]>([
+  const [showAbility, setShowAbility] = useState(false);
+  const [showRegion, setShowRegion] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState("all");
+  const [selectedAbility, setSelectedAbility] = useState("all");
+  const [regionList, setRegionList] = useState<RegionType[]>([
     {
-      key: "all",
+      id: 0,
+      enName: "all",
       name: "전체",
     },
   ]);
 
-  const characterDropdownRef = useRef<HTMLDivElement>(null);
-  const locationDropdownRef = useRef<HTMLDivElement>(null);
-
-  // Todo
-  const [characterTypeList, setCharacterTypeList] = useState([
-    "전체",
-    "테스트",
+  const [abilityTypeList, setAbilityTypeList] = useState<AbilityType[]>([
+    {
+      id: 0,
+      enName: "all",
+      name: "전체",
+    },
   ]);
+
+  const abilityDropdownRef = useRef<HTMLDivElement>(null);
+  const regionDropdownRef = useRef<HTMLDivElement>(null);
 
   // 지방 리스트 불러오기
   useEffect(() => {
-    getLocation().then((data) => {
-      setLocationList((prev) => [...prev, ...data]);
-      console.log(locationList);
+    getRegionList().then((data) => {
+      setRegionList((prev) => [...prev, ...data]);
+    });
+  }, []);
+
+  // 특성 리스트 불러오기
+  useEffect(() => {
+    getAbilities().then((data) => {
+      setAbilityTypeList((prev) => [...prev, ...data]);
     });
   }, []);
 
@@ -42,44 +52,50 @@ function DetailSearchBar(props: { showDetail: boolean }) {
   useEffect(() => {
     function handleClickOutside(e: MouseEvent): void {
       if (
-        characterDropdownRef.current &&
-        !characterDropdownRef.current.contains(e.target as Node)
+        abilityDropdownRef.current &&
+        !abilityDropdownRef.current.contains(e.target as Node)
       ) {
-        setShowCharacter(false);
+        setShowAbility(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [characterDropdownRef]);
+  }, [abilityDropdownRef]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent): void {
       if (
-        locationDropdownRef.current &&
-        !locationDropdownRef.current.contains(e.target as Node)
+        regionDropdownRef.current &&
+        !regionDropdownRef.current.contains(e.target as Node)
       ) {
-        setShowLocation(false);
+        setShowRegion(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [locationDropdownRef]);
+  }, [regionDropdownRef]);
 
   // 특성 드롭다운 열고 닫기
   const onClickShowCharacterHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    setShowLocation(false);
-    setShowCharacter(!showCharacter);
+    setShowRegion(false);
+    setShowAbility(!showAbility);
+    console.log(showAbility);
+    if (!showAbility) {
+      document.querySelectorAll("#abilityDropdownBox span").forEach((span) => {
+        console.log(span.innerHTML);
+      });
+    }
   };
 
   // 지방 드롭다운 열고 닫기
   const onClickShowLocationHandler = () => {
-    setShowCharacter(false);
-    setShowLocation(!showLocation);
+    setShowAbility(!showAbility);
+    setShowRegion(!showRegion);
   };
 
   // drop-down 클릭시 가장 최상위 부모를 클릭했을 때만 이벤트가 일어날 수 있도록
@@ -97,9 +113,15 @@ function DetailSearchBar(props: { showDetail: boolean }) {
   };
 
   // 지방 선택
-  const selectLocationHandler = (location: string) => {
-    setSelectedLocation(location);
-    setShowLocation(false);
+  const selectLocationHandler = (enName: string) => {
+    setSelectedRegion(enName);
+    setShowRegion(false);
+  };
+
+  // 특성 선택
+  const selectAbilityHandler = (enName: string) => {
+    setSelectedAbility(enName);
+    setShowAbility(false);
   };
 
   return (
@@ -124,21 +146,29 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                 md={10}
                 onClick={onClickShowCharacterHandler}
                 id="characterDropdown"
-                ref={characterDropdownRef}
+                ref={abilityDropdownRef}
                 className={classes.box}
               >
-                <span style={{ width: "100%", textAlign: "center" }}>전체</span>
+                <span style={{ width: "100%", textAlign: "center" }}>
+                  {translator.get(selectedAbility) || selectedAbility}
+                </span>
                 <ExpandMoreIcon
                   style={{ float: "right", paddingRight: "10px" }}
                 />
-                {showCharacter && (
+                {showAbility && (
                   <Grid
                     item
+                    id="abilityDropdownBox"
                     xs={12}
                     md={10}
                     sx={{ position: "absolute" }}
                     className={classes.dropdownBox}
                     onClick={onClickChildrenShowCharacterHandler}
+                    style={{
+                      display: "block",
+                      height: "200px",
+                      overflow: "auto",
+                    }}
                   >
                     <Grid container sx={{ display: "block" }}>
                       <Grid
@@ -149,15 +179,17 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                       >
                         <input type="text" />
                       </Grid>
-                      {characterTypeList.map((c) => {
+                      {abilityTypeList.map((c) => {
                         return (
                           <Grid
                             item
                             xs={12}
                             md={12}
                             sx={{ display: "flex", justifyContent: "center" }}
+                            key={c.id}
+                            onClick={() => selectAbilityHandler(c.enName)}
                           >
-                            <span>{c}</span>
+                            <span>{c.name}</span>
                           </Grid>
                         );
                       })}
@@ -180,16 +212,16 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                 xs={12}
                 md={10}
                 className={classes.box}
-                ref={locationDropdownRef}
+                ref={regionDropdownRef}
                 onClick={onClickShowLocationHandler}
               >
                 <span style={{ width: "100%", textAlign: "center" }}>
-                  {translater.get(selectedLocation)}
+                  {translator.get(selectedRegion)}
                 </span>
                 <ExpandMoreIcon
                   style={{ float: "right", paddingRight: "10px" }}
                 />
-                {showLocation && (
+                {showRegion && (
                   <Grid
                     item
                     xs={12}
@@ -206,18 +238,18 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                         overflow: "auto",
                       }}
                     >
-                      {locationList.map((l) => {
+                      {regionList.map((l) => {
                         return (
                           <Grid
                             item
                             xs={12}
                             md={12}
-                            key={l.key}
+                            key={l.id}
                             sx={{ display: "flex", justifyContent: "center" }}
                             className={
-                              selectedLocation === l.key ? classes.selected : ""
+                              selectedRegion === l.name ? classes.selected : ""
                             }
-                            onClick={() => selectLocationHandler(l.key)}
+                            onClick={() => selectLocationHandler(l.enName)}
                           >
                             <span>{l.name}</span>
                           </Grid>

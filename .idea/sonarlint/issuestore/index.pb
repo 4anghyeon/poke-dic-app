@@ -13,3 +13,9 @@ W
 'src/components/header/header.module.css,0/5/05898bd823dc5f4bbd753b83aa1a19a1fd70495a
 A
 public/index.html,f/4/f43ecdf8d666ee908aacce037b4cd72159e4741b
+a
+1src/components/header/detail/type-card.module.css,2/1/21b1e17049a2c87a636a49ad44c753aab2c4f560
+F
+src/react-app-env.d.ts,4/a/4a7b99bdbee5792679d347b6474463bf5e14b66d
+Y
+)src/components/header/detail/TypeCard.tsx,1/1/116a0766199503ea840b686588354334ad10a1d6
