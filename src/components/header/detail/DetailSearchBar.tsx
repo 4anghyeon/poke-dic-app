@@ -84,17 +84,28 @@ function DetailSearchBar(props: { showDetail: boolean }) {
     e.preventDefault();
     setShowRegion(false);
     setShowAbility(!showAbility);
-    console.log(showAbility);
-    if (!showAbility) {
-      document.querySelectorAll("#abilityDropdownBox span").forEach((span) => {
-        console.log(span.innerHTML);
-      });
-    }
+    setTimeout(() => {
+      if (!showAbility) {
+        document
+          .querySelectorAll("#abilityDropdownBox span")
+          .forEach((span, index) => {
+            if (
+              span.innerHTML ===
+              (translator.get(selectedAbility) || selectedAbility)
+            ) {
+              document.getElementById("abilityDropdownBox")!.scrollTop =
+                span.parentElement!.clientHeight * index +
+                span.parentElement!.clientHeight;
+              return;
+            }
+          });
+      }
+    });
   };
 
   // 지방 드롭다운 열고 닫기
   const onClickShowLocationHandler = () => {
-    setShowAbility(!showAbility);
+    setShowAbility(false);
     setShowRegion(!showRegion);
   };
 
@@ -188,6 +199,11 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                             sx={{ display: "flex", justifyContent: "center" }}
                             key={c.id}
                             onClick={() => selectAbilityHandler(c.enName)}
+                            className={
+                              selectedAbility === c.enName
+                                ? classes.selected
+                                : ""
+                            }
                           >
                             <span>{c.name}</span>
                           </Grid>
@@ -247,7 +263,9 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                             key={l.id}
                             sx={{ display: "flex", justifyContent: "center" }}
                             className={
-                              selectedRegion === l.name ? classes.selected : ""
+                              selectedRegion === l.enName
+                                ? classes.selected
+                                : ""
                             }
                             onClick={() => selectLocationHandler(l.enName)}
                           >
