@@ -1,0 +1,8 @@
+.pokemonCard div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.pokemonCard img {
+    width: 180px
+}

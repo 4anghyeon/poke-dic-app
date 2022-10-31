@@ -1,50 +1,56 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { ChangeEventHandler, useEffect, useRef, useState } from "react";
 import classes from "./detail-search-bar.module.css";
 import { Grid } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TypeCard from "./TypeCard";
 import RegionType from "../../../dataTypes/RegionType";
 import translator from "../../../translator";
-import { getAbilities, getRegionList } from "../../../api/pokeApi";
+import { getAbilities, getRegionList, getTypes } from "../../../api/pokeApi";
 import { AbilityType } from "../../../dataTypes/AbilityType";
+import PokemonTypeType from "../../../dataTypes/PokemonTypeType";
 
 // 지방 리스트 불러오기 API
 
 function DetailSearchBar(props: { showDetail: boolean }) {
+  const defaultObject = {
+    id: 0,
+    enName: "all",
+    name: "전체",
+  };
+
+  const [queryRegion, setQueryRegion] = useState("");
+
   const [showAbility, setShowAbility] = useState(false);
   const [showRegion, setShowRegion] = useState(false);
+
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedAbility, setSelectedAbility] = useState("all");
-  const [regionList, setRegionList] = useState<RegionType[]>([
-    {
-      id: 0,
-      enName: "all",
-      name: "전체",
-    },
-  ]);
 
-  const [abilityTypeList, setAbilityTypeList] = useState<AbilityType[]>([
-    {
-      id: 0,
-      enName: "all",
-      name: "전체",
-    },
+  const [regionList, setRegionList] = useState<RegionType[]>([defaultObject]);
+  const [allAbilityTypeList, setAllAbilityTypeList] = useState<AbilityType[]>([
+    defaultObject,
   ]);
+  const [abilityTypeList, setAbilityTypeList] = useState<AbilityType[]>([
+    defaultObject,
+  ]);
+  const [typeList, setTypeList] = useState<PokemonTypeType[]>([]);
 
   const abilityDropdownRef = useRef<HTMLDivElement>(null);
   const regionDropdownRef = useRef<HTMLDivElement>(null);
 
-  // 지방 리스트 불러오기
-  useEffect(() => {
-    getRegionList().then((data) => {
-      setRegionList((prev) => [...prev, ...data]);
-    });
-  }, []);
-
-  // 특성 리스트 불러오기
+  // 지방, 특성, 타입 리스트 불러오기
   useEffect(() => {
     getAbilities().then((data) => {
       setAbilityTypeList((prev) => [...prev, ...data]);
+      setAllAbilityTypeList((prev) => [...prev, ...data]);
+    });
+
+    getRegionList().then((data) => {
+      setRegionList((prev) => [...prev, ...data]);
+    });
+
+    getTypes().then((data) => {
+      setTypeList((prev) => [...prev, ...data]);
     });
   }, []);
 
@@ -94,9 +100,8 @@ function DetailSearchBar(props: { showDetail: boolean }) {
               (translator.get(selectedAbility) || selectedAbility)
             ) {
               document.getElementById("abilityDropdownBox")!.scrollTop =
-                span.parentElement!.clientHeight * index +
+                span.parentElement!.clientHeight * index -
                 span.parentElement!.clientHeight;
-              return;
             }
           });
       }
@@ -133,6 +138,25 @@ function DetailSearchBar(props: { showDetail: boolean }) {
   const selectAbilityHandler = (enName: string) => {
     setSelectedAbility(enName);
     setShowAbility(false);
+  };
+
+  // 특성 검색 이벤트
+  // + 검색 input debounce
+  useEffect(() => {
+    if (!showAbility) return;
+    const debounce = setTimeout(() => {
+      setAbilityTypeList(
+        allAbilityTypeList.filter((all) => all.name.includes(queryRegion))
+      );
+      return {};
+    }, 150);
+    return () => clearTimeout(debounce);
+  }, [queryRegion]);
+
+  const abilityInputChangeHandler = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setQueryRegion(e.target.value);
   };
 
   return (
@@ -188,7 +212,10 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                         md={12}
                         sx={{ display: "flex", justifyContent: "center" }}
                       >
-                        <input type="text" />
+                        <input
+                          type="text"
+                          onChange={abilityInputChangeHandler}
+                        />
                       </Grid>
                       {abilityTypeList.map((c) => {
                         return (
@@ -348,26 +375,9 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                 md={8}
                 sx={{ display: "flex", justifyContent: "flex-start" }}
               >
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
-                <TypeCard />
+                {typeList.map((type) => {
+                  return <TypeCard key={type.id} name={type.name} />;
+                })}
               </Grid>
             </Grid>
           </Grid>
