@@ -1,3 +1,5 @@
+import PokemonTypeType from "./PokemonTypeType";
+
 export default interface PokemonType {
   name: string;
   enName: string;
@@ -9,4 +11,7 @@ export default interface PokemonType {
       };
     };
   };
+  types: {
+    type: PokemonTypeType;
+  }[];
 }

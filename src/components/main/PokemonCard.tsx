@@ -2,17 +2,30 @@ import React from "react";
 import { Box, Grid } from "@mui/material";
 import classes from "./pokemon-card.module.css";
 import PokemonType from "../../dataTypes/PokemonType";
+import translator from "../../translator";
+import TypeBox from "./TypeBox";
 
 function PokemonCard(props: { pokemon: PokemonType }) {
   const { pokemon } = props;
   return (
-    <Grid item xs={6} sm={6} md={2} className={classes.pokemonCard}>
-      <Box>
+    <Grid container item xs={6} sm={6} md={2} className={classes.pokemonCard}>
+      <Grid item>
         <img
           src={pokemon.sprites.other["official-artwork"].front_default}
           alt={pokemon.name}
         />
-      </Box>
+      </Grid>
+      <Grid item className={classes.number}>
+        <span>{`No. ${pokemon.id.toString().padStart(3, "0")}`}</span>
+      </Grid>
+      <Grid item className={classes.name}>
+        <h2>{translator.get(pokemon.name) || pokemon.name}</h2>
+      </Grid>
+      <Grid item className={classes.types}>
+        {pokemon.types.map((type) => {
+          return <TypeBox key={type.type.name} name={type.type.name} />;
+        })}
+      </Grid>
     </Grid>
   );
 }

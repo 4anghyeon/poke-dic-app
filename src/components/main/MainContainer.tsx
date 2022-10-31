@@ -21,7 +21,7 @@ function MainContainer() {
   const scrollEventHandler = (e: Event) => {
     const body = document.scrollingElement!;
     const debounce = setTimeout(() => {
-      if (body.clientHeight + body.scrollTop > body.scrollHeight) {
+      if (body.clientHeight + body.scrollTop >= body.scrollHeight) {
         setIsScrollEnd(true);
       }
     }, 10);

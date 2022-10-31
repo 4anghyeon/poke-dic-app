@@ -1,8 +1,40 @@
-.pokemonCard div{
+.pokemonCard {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 15px;
+    cursor: pointer;
+    width: 100%;
+}
+.pokemonCard:hover img {
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 1px 1px 1px 1px;
+    transition: all .2s ease-in;
 }
 .pokemonCard img {
-    width: 180px
+    width: 100%;
+    height: 100%;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+}
+.pokemonCard .number {
+    margin: 10px 0 0 0;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 !important;
+    color: #adb5bd;
+    width: 100%;
+}
+
+.pokemonCard .name {
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 !important;
+    color: black;
+    width: 100%;
+}
+
+.pokemonCard .types {
+    margin: 0 0 50px 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 }

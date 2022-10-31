@@ -1,0 +1,9 @@
+.typeBoxContainer {
+    display: flex;
+    justify-content: center;
+    margin: 1px;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+}
