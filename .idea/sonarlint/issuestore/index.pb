@@ -1,8 +1,4 @@
 
-A
-src/setupTests.ts,3/9/39129446b425a1d640160c068e4194e96639eedf
-<
-package.json,7/0/7030d0b2f71b999ff89a343de08c414af32fc93a
 S
 #src/components/header/SearchBar.tsx,8/3/83f0f2106775d613237f901e1fb0e1de7c2b9655
 D
@@ -17,8 +13,6 @@ F
 src/react-app-env.d.ts,4/a/4a7b99bdbee5792679d347b6474463bf5e14b66d
 =
 src/index.tsx,5/a/5ab44fe33ca96299f51ad4778a73e425b92bf439
-=
-tsconfig.json,6/1/61ebb9fd6e8cf9082658121d5d81e297791dacd0
 J
 src/dataTypes/NamesType.ts,5/a/5ae97283985920b003de1de02d6cff0579f1f498
 K
@@ -41,3 +35,15 @@ W
 'src/components/main/type-box.module.css,7/3/73d96fb8070bcd368635b253fb6b916641f047df
 [
 +src/components/main/pokemon-card.module.css,a/1/a12d4497aa293dad166c278a401d313e2586dc12
+P
+ src/dataTypes/PokemonTypeType.ts,9/8/987b970eefc949534ef04111bf535a1df81e228b
+P
+ src/components/header/Header.tsx,9/0/9060a042469f8f70ed376282c1ad114796b79ab6
+U
+%src/components/main/MainContainer.tsx,e/7/e7e8517a6091a90e4a6571120b60511f53606ba1
+S
+#src/components/main/PokemonCard.tsx,b/6/b6c5b3e3734b60d57c38092fcec5d28056bd1513
+Y
+)src/components/header/detail/TypeCard.tsx,1/1/116a0766199503ea840b686588354334ad10a1d6
+O
+src/components/main/TypeBox.tsx,6/1/6110a8caa6e7fff53d6d12a86b95e0cb3e1d1621

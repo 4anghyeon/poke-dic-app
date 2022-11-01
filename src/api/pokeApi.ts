@@ -136,6 +136,7 @@ const getPokemonById = async (id: number) => {
     },
     types: [],
   };
+
   await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
     .then((res) => res.json())
     .then((data) => {
@@ -144,6 +145,14 @@ const getPokemonById = async (id: number) => {
       result.sprites.other["official-artwork"] =
         data.sprites.other["official-artwork"];
       result.types = data.types;
+
+      fetch("http://localhost:3001/upsert", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(result),
+      });
     });
 
   return result;
