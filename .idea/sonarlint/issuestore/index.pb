@@ -1,6 +1,4 @@
 
-S
-#src/components/header/SearchBar.tsx,8/3/83f0f2106775d613237f901e1fb0e1de7c2b9655
 D
 public/manifest.json,4/2/42e89cd2213b9d5dfae4f63522702c623170d792
 [
@@ -35,10 +33,6 @@ W
 'src/components/main/type-box.module.css,7/3/73d96fb8070bcd368635b253fb6b916641f047df
 [
 +src/components/main/pokemon-card.module.css,a/1/a12d4497aa293dad166c278a401d313e2586dc12
-P
- src/dataTypes/PokemonTypeType.ts,9/8/987b970eefc949534ef04111bf535a1df81e228b
-P
- src/components/header/Header.tsx,9/0/9060a042469f8f70ed376282c1ad114796b79ab6
 U
 %src/components/main/MainContainer.tsx,e/7/e7e8517a6091a90e4a6571120b60511f53606ba1
 S
@@ -47,3 +41,5 @@ Y
 )src/components/header/detail/TypeCard.tsx,1/1/116a0766199503ea840b686588354334ad10a1d6
 O
 src/components/main/TypeBox.tsx,6/1/6110a8caa6e7fff53d6d12a86b95e0cb3e1d1621
+A
+src/setupTests.ts,3/9/39129446b425a1d640160c068e4194e96639eedf
