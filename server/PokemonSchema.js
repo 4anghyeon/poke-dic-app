@@ -9,18 +9,18 @@ const pokemonSchema = new Schema({
   },
   name: {
     type: String,
-    required: true, // null 여부
-    unique: true, // 유니크 여부
+    required: true,
+    unique: true,
   },
   type1: {
     type: String,
     required: true,
-    unique: false, // 유니크 여부
+    unique: false,
   },
   type2: {
     type: String,
     required: false,
-    unique: false, // 유니크 여부
+    unique: false,
   },
 });
 

@@ -100,10 +100,7 @@ export const getTypes = async () => {
 };
 
 // 포켓몬
-export const getPokemonListByIdRange = async (
-  startId: number,
-  endId: number
-) => {
+export const getPokemonListByIdRange = async (startId: number) => {
   let result: PokemonType[] = [];
   await fetch(
     `https://pokeapi.co/api/v2/pokemon/?offset=${startId}&limit=${30}`
@@ -122,7 +119,7 @@ export const getPokemonListByIdRange = async (
   return result;
 };
 
-const getPokemonById = async (id: number) => {
+export const getPokemonById = async (id: number) => {
   let result: PokemonType = {
     id: id,
     name: "",
