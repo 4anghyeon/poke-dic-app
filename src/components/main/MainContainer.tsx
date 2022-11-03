@@ -41,7 +41,7 @@ function MainContainer() {
     return () => clearTimeout(debounce);
   };
 
-  // 포켓몬 목록 불러오기
+  // 포켓몬 목록 불러오기 (첫 로딩)
   const setDisplayPokemonList = (list: PokemonType[]) => {
     setDefaultPokemonList((prev) => [...prev, ...list]);
     setStartId((prev) => prev + 30);
@@ -49,8 +49,8 @@ function MainContainer() {
     setIsScrollEnd(false);
   };
 
+  // 포켓몬 목록 불러오기 검색 및 스크롤 이벤트 발생 시
   useEffect(() => {
-    setIsLoading(true);
     if ((isScrollEnd && !isLoading) || startId === 0) {
       if (searchedPokemonList.length === 0) {
         getPokemonListByIdRange(startId).then((data) => {
@@ -78,7 +78,7 @@ function MainContainer() {
     }
   }, [isScrollEnd, isLoading]);
 
-  // 검색 이벤트
+  // 검색 이벤트 발생 알림
   useEffect(() => {
     if (searchFlag) {
       setStartId(0);

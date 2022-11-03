@@ -52,3 +52,9 @@ P
  src/components/header/Header.tsx,9/0/9060a042469f8f70ed376282c1ad114796b79ab6
 ?
 server/index.js,e/1/e1a504bc36c43a5b06e18911fe39381356468d7f
+]
+-src/components/main/main-container.module.css,1/c/1cc3dc7e009ec1d1cd7e0d4f02ab7de51bba86c4
+N
+src/dataTypes/DBPokemonType.ts,d/0/d046dc9bfd080c312f7947702afbb1a74cf9a5fb
+G
+server/PokemonSchema.js,8/e/8e7edd9b163d51df3e909a40215233dea51fd2d2

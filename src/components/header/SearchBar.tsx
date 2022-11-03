@@ -18,11 +18,12 @@ function SearchBar() {
 
   const [searchFlag, setSearchFlag] = useRecoilState(searchFlagState);
 
-  const queryChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value.trimEnd());
-  };
-
-  const searchButtonClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const queryHandler = () => {
+    if (query === "") {
+      setSearchFlag(true);
+      setSearchedPokemonList([]);
+      return;
+    }
     fetch("http://localhost:3001/search", {
       method: "POST",
       headers: {
@@ -39,6 +40,20 @@ function SearchBar() {
       });
   };
 
+  const onKeyPressHandler = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      queryHandler();
+    }
+  };
+
+  const queryChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value.trimEnd());
+  };
+
+  const searchButtonClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    queryHandler();
+  };
+
   return (
     <Box className={classes.searchBar} sx={{ width: "100%" }}>
       <Box
@@ -51,6 +66,7 @@ function SearchBar() {
         <input
           placeholder="포켓몬 이름 설명, 특성 키워드를 입력해주세요."
           onChange={queryChangeHandler}
+          onKeyUp={onKeyPressHandler}
         />
         <Button variant="contained" onClick={searchButtonClickHandler}>
           <SearchIcon />
