@@ -23,3 +23,7 @@
     color: black;
     font-size: 12px;
 }
+
+.checkTypeBox {
+    opacity: 0.7;
+}

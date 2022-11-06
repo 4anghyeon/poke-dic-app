@@ -6,6 +6,8 @@ import { getPokemonById, getPokemonListByIdRange } from "../../api/pokeApi";
 import PokemonType from "../../dataTypes/PokemonType";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
+  detailSearchFlagState,
+  queryState,
   searchedPokemonListState,
   searchFlagState,
 } from "../../state/atomState";
@@ -16,8 +18,13 @@ function MainContainer() {
     []
   );
 
+  const query = useRecoilValue(queryState);
+
   // 검색 버튼 이벤트 발생 여부
   const [searchFlag, setSearchFlag] = useRecoilState(searchFlagState);
+  const [detailSearchFlag, setDetailSearchFlag] = useRecoilState(
+    detailSearchFlagState
+  );
 
   // 검색된 포켓몬 목록 (DB에서 가져옴)
   const searchedPokemonList = useRecoilValue<DBPokemonType[]>(
@@ -52,13 +59,14 @@ function MainContainer() {
   // 포켓몬 목록 불러오기 검색 및 스크롤 이벤트 발생 시
   useEffect(() => {
     if ((isScrollEnd && !isLoading) || startId === 0) {
-      if (searchedPokemonList.length === 0) {
+      setIsLoading(true);
+      if (searchedPokemonList.length === 0 && query.length === 0) {
         getPokemonListByIdRange(startId).then((data) => {
           setDisplayPokemonList(data);
         });
       } else {
         let resultPokemonList: PokemonType[] = [];
-        let queryData = searchedPokemonList.slice(startId);
+        let queryData = searchedPokemonList.slice(startId, startId + 30);
         if (queryData.length === 0) {
           setIsLoading(false);
           setIsScrollEnd(false);
@@ -91,6 +99,17 @@ function MainContainer() {
     };
   }, [searchFlag]);
 
+  useEffect(() => {
+    if (detailSearchFlag) {
+      setStartId(0);
+      setDefaultPokemonList([]);
+      setIsLoading(true);
+    }
+    return () => {
+      setDetailSearchFlag(false);
+    };
+  }, [detailSearchFlag]);
+
   return (
     <Box ref={mainContainerRef}>
       <Grid container></Grid>
@@ -98,6 +117,20 @@ function MainContainer() {
         {defaultPokemonList.map((pokemon) => {
           return <PokemonCard key={pokemon.id} pokemon={pokemon} />;
         })}
+        {defaultPokemonList.length === 0 && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "80vh",
+            }}
+          >
+            <h2>검색 결과가 없습니다.</h2>
+            <h5>다른 키워드로 검색해주세요.</h5>
+          </Box>
+        )}
       </Grid>
       {isLoading && (
         <Grid container>

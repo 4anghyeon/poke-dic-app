@@ -49,6 +49,41 @@ app.post("/search", async (req, res) => {
     });
 });
 
+app.post("/searchDetail", async (req, res) => {
+  const query = req.body.query;
+  const startNumber = req.body.startNumber;
+  const endNumber = req.body.endNumber;
+  const selectedType = req.body.selectedType;
+  console.log(query, startNumber, endNumber, selectedType);
+  await Pokemon.find({
+    name: { $regex: ".*" + query.trim() + ".*" },
+    $or: [
+      {
+        type1: { $regex: ".*" + query.trim() + ".*", $in: selectedType },
+      },
+      {
+        type2: { $regex: ".*" + query.trim() + ".*", $in: selectedType },
+      },
+    ],
+  })
+    .where("number")
+    .gte(startNumber)
+    .lte(endNumber)
+    .exec((err, data) => {
+      if (err) {
+        res.send({
+          success: false,
+          message: "error",
+        });
+      }
+      if (data) {
+        res.send({
+          data: data,
+        });
+      }
+    });
+});
+
 app.post("/upsert", async (req, res) => {
   const pokemon = new Pokemon({
     number: req.body.id, // 유저 스키마의 아이디 (_id)

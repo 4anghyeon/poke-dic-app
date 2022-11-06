@@ -4,14 +4,16 @@ import classes from "./search-bar.module.css";
 import SearchIcon from "@mui/icons-material/Search";
 import { selector, useRecoilState } from "recoil";
 import {
+  queryState,
   searchedPokemonListState,
   searchFlagState,
+  searchNumberState,
 } from "../../state/atomState";
 import PokemonType from "../../dataTypes/PokemonType";
 import { DBPokemonType } from "../../dataTypes/DBPokemonType";
 
 function SearchBar() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useRecoilState(queryState);
   const [searchedPokemonList, setSearchedPokemonList] = useRecoilState<
     DBPokemonType[]
   >(searchedPokemonListState);

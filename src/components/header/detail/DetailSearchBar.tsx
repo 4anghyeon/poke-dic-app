@@ -8,6 +8,15 @@ import translator from "../../../translator";
 import { getAbilities, getRegionList, getTypes } from "../../../api/pokeApi";
 import { AbilityType } from "../../../dataTypes/AbilityType";
 import PokemonTypeType from "../../../dataTypes/PokemonTypeType";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  detailSearchFlagState,
+  queryState,
+  searchedPokemonListState,
+  searchNumberState,
+} from "../../../state/atomState";
+import e from "express";
+import { DBPokemonType } from "../../../dataTypes/DBPokemonType";
 
 // 지방 리스트 불러오기 API
 
@@ -25,6 +34,7 @@ function DetailSearchBar(props: { showDetail: boolean }) {
 
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedAbility, setSelectedAbility] = useState("all");
+  const [selectedType, setSelectedType] = useState<string[]>([]);
 
   const [regionList, setRegionList] = useState<RegionType[]>([defaultObject]);
   const [allAbilityTypeList, setAllAbilityTypeList] = useState<AbilityType[]>([
@@ -34,6 +44,19 @@ function DetailSearchBar(props: { showDetail: boolean }) {
     defaultObject,
   ]);
   const [typeList, setTypeList] = useState<PokemonTypeType[]>([]);
+
+  const [searchNumber, setSearchNumber] =
+    useRecoilState<number[]>(searchNumberState);
+
+  const query = useRecoilValue(queryState);
+
+  const [detailSearchFlag, setDetailSearchFlag] = useRecoilState(
+    detailSearchFlagState
+  );
+
+  const [searchedPokemonList, setSearchedPokemonList] = useRecoilState<
+    DBPokemonType[]
+  >(searchedPokemonListState);
 
   const abilityDropdownRef = useRef<HTMLDivElement>(null);
   const regionDropdownRef = useRef<HTMLDivElement>(null);
@@ -157,6 +180,43 @@ function DetailSearchBar(props: { showDetail: boolean }) {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setQueryRegion(e.target.value);
+  };
+
+  // 도감 번호 change handler
+  const detailNumberChangeHandler = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    setSearchNumber((prev) => {
+      let newValue = prev.slice();
+      newValue[index] = Number.parseInt(e.target.value);
+      return newValue;
+    });
+  };
+
+  // 검색 알림 이벤트
+  const detailSearchButtonHandler = (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    fetch("http://localhost:3001/searchDetail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: query,
+        startNumber: searchNumber[0],
+        endNumber: searchNumber[1],
+        selectedType: selectedType.map((type) => translator.get(type)),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (!data.success) return;
+        setDetailSearchFlag(true);
+        setSearchedPokemonList(data.data);
+      });
   };
 
   return (
@@ -331,7 +391,11 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                   md={5}
                   className={`${classes.box} ${classes.numberInput}`}
                 >
-                  <input type="number" />
+                  <input
+                    type="number"
+                    value={searchNumber[0]}
+                    onChange={(e) => detailNumberChangeHandler(e, 0)}
+                  />
                 </Grid>
                 <Grid
                   item
@@ -349,7 +413,11 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                   md={5}
                   className={`${classes.box} ${classes.numberInput}`}
                 >
-                  <input type="number" />
+                  <input
+                    type="number"
+                    value={searchNumber[1]}
+                    onChange={(e) => detailNumberChangeHandler(e, 1)}
+                  />
                 </Grid>
               </Grid>
             </Grid>
@@ -376,11 +444,21 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                 sx={{ display: "flex", justifyContent: "flex-start" }}
               >
                 {typeList.map((type) => {
-                  return <TypeCard key={type.id} name={type.name} />;
+                  return (
+                    <TypeCard
+                      key={type.id}
+                      name={type.name}
+                      selectedType={selectedType}
+                      setSelectedType={setSelectedType}
+                    />
+                  );
                 })}
               </Grid>
             </Grid>
           </Grid>
+        </Grid>
+        <Grid item>
+          <button onClick={detailSearchButtonHandler}>검색</button>
         </Grid>
       </Grid>
     </div>
