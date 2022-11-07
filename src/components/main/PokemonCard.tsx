@@ -4,16 +4,29 @@ import classes from "./pokemon-card.module.css";
 import PokemonType from "../../dataTypes/PokemonType";
 import translator from "../../translator";
 import TypeBox from "./TypeBox";
+import { getPokemonSpecies } from "../../api/pokeApi";
+
+const onClickShowDetailHandler = (pokemon: PokemonType) => {
+  getPokemonSpecies(pokemon.id).then((species) => {
+    console.log(species);
+    console.log(pokemon);
+  });
+};
 
 function PokemonCard(props: { pokemon: PokemonType }) {
   const { pokemon } = props;
   return (
-    <Grid container item xs={6} sm={6} md={2} className={classes.pokemonCard}>
+    <Grid
+      container
+      item
+      xs={6}
+      sm={6}
+      md={2}
+      className={classes.pokemonCard}
+      onClick={() => onClickShowDetailHandler(pokemon)}
+    >
       <Grid item>
-        <img
-          src={pokemon.sprites.other["official-artwork"].front_default}
-          alt={pokemon.name}
-        />
+        <img src={pokemon.sprites.other["official-artwork"].front_default} alt={pokemon.name} />
       </Grid>
       <Grid item className={classes.number}>
         <span>{`No. ${pokemon.id.toString().padStart(3, "0")}`}</span>

@@ -6,13 +6,18 @@ export const searchedPokemonListState = atom<DBPokemonType[]>({
   default: [],
 });
 
-export const searchFlagState = atom<boolean>({
-  key: "searchFlag",
+export const isLoadingState = atom<boolean>({
+  key: "isLoading",
   default: false,
 });
 
-export const detailSearchFlagState = atom<boolean>({
-  key: "detailSearchFlag",
+export const startIdState = atom<number>({
+  key: "startId",
+  default: 0,
+});
+
+export const searchFlagState = atom<boolean>({
+  key: "searchFlag",
   default: false,
 });
 

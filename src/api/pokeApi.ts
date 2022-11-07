@@ -48,9 +48,7 @@ export const getAbilities = async () => {
         result.push({
           enName: r.name,
           id: Number.parseInt(
-            r.url
-              ?.replaceAll("https://pokeapi.co/api/v2/ability/", "")
-              .replaceAll("/", "") as string
+            r.url?.replaceAll("https://pokeapi.co/api/v2/ability/", "").replaceAll("/", "") as string
           ),
           name: r.name,
         });
@@ -84,9 +82,7 @@ export const getTypes = async () => {
     .then(async (data: { results: PokemonTypeType[] }) => {
       data.results.forEach((r) => {
         const id = Number.parseInt(
-          r.url
-            ?.replaceAll("https://pokeapi.co/api/v2/type/", "")
-            .replaceAll("/", "") as string
+          r.url?.replaceAll("https://pokeapi.co/api/v2/type/", "").replaceAll("/", "") as string
         );
         if (id > 10000) return;
         result.push({
@@ -102,16 +98,12 @@ export const getTypes = async () => {
 // 포켓몬
 export const getPokemonListByIdRange = async (startId: number) => {
   let result: PokemonType[] = [];
-  await fetch(
-    `https://pokeapi.co/api/v2/pokemon/?offset=${startId}&limit=${30}`
-  )
+  await fetch(`https://pokeapi.co/api/v2/pokemon/?offset=${startId}&limit=${30}`)
     .then((res) => res.json())
     .then(async (data: { results: PokemonTypeType[] }) => {
       for (const r of data.results) {
         const id = Number.parseInt(
-          r.url
-            ?.replaceAll("https://pokeapi.co/api/v2/pokemon/", "")
-            .replaceAll("/", "") as string
+          r.url?.replaceAll("https://pokeapi.co/api/v2/pokemon/", "").replaceAll("/", "") as string
         );
         await getPokemonById(id).then((data) => result.push(data));
       }
@@ -139,9 +131,10 @@ export const getPokemonById = async (id: number) => {
     .then(async (data) => {
       result.name = data.name;
       result.enName = data.name;
-      result.sprites.other["official-artwork"] =
-        data.sprites.other["official-artwork"];
+      result.sprites.other["official-artwork"] = data.sprites.other["official-artwork"];
       result.types = data.types;
+      result.height = data.height;
+      result.weight = data.weight;
 
       // await fetch("http://localhost:3001/upsert", {
       //   method: "POST",
@@ -160,5 +153,15 @@ export const getPokemonById = async (id: number) => {
       // });
     });
 
+  return result;
+};
+
+export const getPokemonSpecies = async (id: number) => {
+  let result = {};
+  await fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`)
+    .then((res) => res.json())
+    .then((data) => {
+      result = data;
+    });
   return result;
 };

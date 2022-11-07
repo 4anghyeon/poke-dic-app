@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { Dispatch, MouseEventHandler, SetStateAction, useEffect, useRef, useState } from "react";
 import classes from "./detail-search-bar.module.css";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TypeCard from "./TypeCard";
 import RegionType from "../../../dataTypes/RegionType";
@@ -8,19 +8,18 @@ import translator from "../../../translator";
 import { getAbilities, getRegionList, getTypes } from "../../../api/pokeApi";
 import { AbilityType } from "../../../dataTypes/AbilityType";
 import PokemonTypeType from "../../../dataTypes/PokemonTypeType";
-import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  detailSearchFlagState,
-  queryState,
-  searchedPokemonListState,
-  searchNumberState,
-} from "../../../state/atomState";
-import e from "express";
-import { DBPokemonType } from "../../../dataTypes/DBPokemonType";
+import { useRecoilState } from "recoil";
+import { searchNumberState } from "../../../state/atomState";
+import SearchIcon from "@mui/icons-material/Search";
 
 // 지방 리스트 불러오기 API
 
-function DetailSearchBar(props: { showDetail: boolean }) {
+function DetailSearchBar(props: {
+  showDetail: boolean;
+  selectedType: string[];
+  setSelectedType: Dispatch<SetStateAction<string[]>>;
+  searchEventHandler: Function;
+}) {
   const defaultObject = {
     id: 0,
     enName: "all",
@@ -34,32 +33,18 @@ function DetailSearchBar(props: { showDetail: boolean }) {
 
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [selectedAbility, setSelectedAbility] = useState("all");
-  const [selectedType, setSelectedType] = useState<string[]>([]);
 
   const [regionList, setRegionList] = useState<RegionType[]>([defaultObject]);
-  const [allAbilityTypeList, setAllAbilityTypeList] = useState<AbilityType[]>([
-    defaultObject,
-  ]);
-  const [abilityTypeList, setAbilityTypeList] = useState<AbilityType[]>([
-    defaultObject,
-  ]);
+  const [allAbilityTypeList, setAllAbilityTypeList] = useState<AbilityType[]>([defaultObject]);
+  const [abilityTypeList, setAbilityTypeList] = useState<AbilityType[]>([defaultObject]);
   const [typeList, setTypeList] = useState<PokemonTypeType[]>([]);
 
-  const [searchNumber, setSearchNumber] =
-    useRecoilState<number[]>(searchNumberState);
-
-  const query = useRecoilValue(queryState);
-
-  const [detailSearchFlag, setDetailSearchFlag] = useRecoilState(
-    detailSearchFlagState
-  );
-
-  const [searchedPokemonList, setSearchedPokemonList] = useRecoilState<
-    DBPokemonType[]
-  >(searchedPokemonListState);
+  const [searchNumber, setSearchNumber] = useRecoilState<number[]>(searchNumberState);
 
   const abilityDropdownRef = useRef<HTMLDivElement>(null);
   const regionDropdownRef = useRef<HTMLDivElement>(null);
+
+  const [resetFlag, setResetFlag] = useState(false);
 
   // 지방, 특성, 타입 리스트 불러오기
   useEffect(() => {
@@ -80,13 +65,11 @@ function DetailSearchBar(props: { showDetail: boolean }) {
   // 드롭다운 바깥 클릭시 자동 닫힘
   useEffect(() => {
     function handleClickOutside(e: MouseEvent): void {
-      if (
-        abilityDropdownRef.current &&
-        !abilityDropdownRef.current.contains(e.target as Node)
-      ) {
+      if (abilityDropdownRef.current && !abilityDropdownRef.current.contains(e.target as Node)) {
         setShowAbility(false);
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -95,13 +78,11 @@ function DetailSearchBar(props: { showDetail: boolean }) {
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent): void {
-      if (
-        regionDropdownRef.current &&
-        !regionDropdownRef.current.contains(e.target as Node)
-      ) {
+      if (regionDropdownRef.current && !regionDropdownRef.current.contains(e.target as Node)) {
         setShowRegion(false);
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -115,18 +96,12 @@ function DetailSearchBar(props: { showDetail: boolean }) {
     setShowAbility(!showAbility);
     setTimeout(() => {
       if (!showAbility) {
-        document
-          .querySelectorAll("#abilityDropdownBox span")
-          .forEach((span, index) => {
-            if (
-              span.innerHTML ===
-              (translator.get(selectedAbility) || selectedAbility)
-            ) {
-              document.getElementById("abilityDropdownBox")!.scrollTop =
-                span.parentElement!.clientHeight * index -
-                span.parentElement!.clientHeight;
-            }
-          });
+        document.querySelectorAll("#abilityDropdownBox span").forEach((span, index) => {
+          if (span.innerHTML === (translator.get(selectedAbility) || selectedAbility)) {
+            document.getElementById("abilityDropdownBox")!.scrollTop =
+              span.parentElement!.clientHeight * index - span.parentElement!.clientHeight;
+          }
+        });
       }
     });
   };
@@ -139,15 +114,11 @@ function DetailSearchBar(props: { showDetail: boolean }) {
 
   // drop-down 클릭시 가장 최상위 부모를 클릭했을 때만 이벤트가 일어날 수 있도록
   // 자식 요소에서는 이벤트 전파를 막는다
-  const onClickChildrenShowCharacterHandler = (
-    e: React.MouseEvent<HTMLElement>
-  ) => {
+  const onClickChildrenShowCharacterHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
   };
 
-  const onClickChildrenShowLocationHandler = (
-    e: React.MouseEvent<HTMLElement>
-  ) => {
+  const onClickChildrenShowLocationHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
   };
 
@@ -168,25 +139,18 @@ function DetailSearchBar(props: { showDetail: boolean }) {
   useEffect(() => {
     if (!showAbility) return;
     const debounce = setTimeout(() => {
-      setAbilityTypeList(
-        allAbilityTypeList.filter((all) => all.name.includes(queryRegion))
-      );
+      setAbilityTypeList(allAbilityTypeList.filter((all) => all.name.includes(queryRegion)));
       return {};
     }, 150);
     return () => clearTimeout(debounce);
   }, [queryRegion]);
 
-  const abilityInputChangeHandler = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const abilityInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQueryRegion(e.target.value);
   };
 
   // 도감 번호 change handler
-  const detailNumberChangeHandler = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
+  const detailNumberChangeHandler = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     setSearchNumber((prev) => {
       let newValue = prev.slice();
       newValue[index] = Number.parseInt(e.target.value);
@@ -194,29 +158,11 @@ function DetailSearchBar(props: { showDetail: boolean }) {
     });
   };
 
-  // 검색 알림 이벤트
-  const detailSearchButtonHandler = (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    fetch("http://localhost:3001/searchDetail", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: query,
-        startNumber: searchNumber[0],
-        endNumber: searchNumber[1],
-        selectedType: selectedType.map((type) => translator.get(type)),
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (!data.success) return;
-        setDetailSearchFlag(true);
-        setSearchedPokemonList(data.data);
-      });
+  // reset button handler
+  const resetEventHandler = () => {
+    setSearchNumber([1, 905]);
+    props.setSelectedType([]);
+    setResetFlag(!resetFlag);
   };
 
   return (
@@ -231,7 +177,10 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                 item
                 xs={12}
                 md={2}
-                sx={{ paddingRight: "15px", paddingBottom: "15px" }}
+                sx={{
+                  paddingRight: "15px",
+                  paddingBottom: "15px",
+                }}
               >
                 <span>특성</span>
               </Grid>
@@ -244,11 +193,19 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                 ref={abilityDropdownRef}
                 className={classes.box}
               >
-                <span style={{ width: "100%", textAlign: "center" }}>
+                <span
+                  style={{
+                    width: "100%",
+                    textAlign: "center",
+                  }}
+                >
                   {translator.get(selectedAbility) || selectedAbility}
                 </span>
                 <ExpandMoreIcon
-                  style={{ float: "right", paddingRight: "10px" }}
+                  style={{
+                    float: "right",
+                    paddingRight: "10px",
+                  }}
                 />
                 {showAbility && (
                   <Grid
@@ -270,12 +227,12 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                         item
                         xs={12}
                         md={12}
-                        sx={{ display: "flex", justifyContent: "center" }}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
                       >
-                        <input
-                          type="text"
-                          onChange={abilityInputChangeHandler}
-                        />
+                        <input type="text" onChange={abilityInputChangeHandler} />
                       </Grid>
                       {abilityTypeList.map((c) => {
                         return (
@@ -283,14 +240,13 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                             item
                             xs={12}
                             md={12}
-                            sx={{ display: "flex", justifyContent: "center" }}
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
                             key={c.id}
                             onClick={() => selectAbilityHandler(c.enName)}
-                            className={
-                              selectedAbility === c.enName
-                                ? classes.selected
-                                : ""
-                            }
+                            className={selectedAbility === c.enName ? classes.selected : ""}
                           >
                             <span>{c.name}</span>
                           </Grid>
@@ -306,7 +262,10 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                 item
                 xs={12}
                 md={2}
-                sx={{ paddingRight: "15px", paddingBottom: "15px" }}
+                sx={{
+                  paddingRight: "15px",
+                  paddingBottom: "15px",
+                }}
               >
                 <span>지방</span>
               </Grid>
@@ -318,11 +277,19 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                 ref={regionDropdownRef}
                 onClick={onClickShowLocationHandler}
               >
-                <span style={{ width: "100%", textAlign: "center" }}>
+                <span
+                  style={{
+                    width: "100%",
+                    textAlign: "center",
+                  }}
+                >
                   {translator.get(selectedRegion)}
                 </span>
                 <ExpandMoreIcon
-                  style={{ float: "right", paddingRight: "10px" }}
+                  style={{
+                    float: "right",
+                    paddingRight: "10px",
+                  }}
                 />
                 {showRegion && (
                   <Grid
@@ -348,12 +315,11 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                             xs={12}
                             md={12}
                             key={l.id}
-                            sx={{ display: "flex", justifyContent: "center" }}
-                            className={
-                              selectedRegion === l.enName
-                                ? classes.selected
-                                : ""
-                            }
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                            className={selectedRegion === l.enName ? classes.selected : ""}
                             onClick={() => selectLocationHandler(l.enName)}
                           >
                             <span>{l.name}</span>
@@ -370,7 +336,10 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                 item
                 sm={12}
                 md={2}
-                sx={{ paddingRight: "15px", paddingBottom: "15px" }}
+                sx={{
+                  paddingRight: "15px",
+                  paddingBottom: "15px",
+                }}
               >
                 <span>도감번호</span>
               </Grid>
@@ -384,40 +353,14 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                   alignItems: "center",
                 }}
               >
-                <Grid
-                  item
-                  xs={5}
-                  sm={5}
-                  md={5}
-                  className={`${classes.box} ${classes.numberInput}`}
-                >
-                  <input
-                    type="number"
-                    value={searchNumber[0]}
-                    onChange={(e) => detailNumberChangeHandler(e, 0)}
-                  />
+                <Grid item xs={5} sm={5} md={5} className={`${classes.box} ${classes.numberInput}`}>
+                  <input type="number" value={searchNumber[0]} onChange={(e) => detailNumberChangeHandler(e, 0)} />
                 </Grid>
-                <Grid
-                  item
-                  xs={2}
-                  sm={2}
-                  md={2}
-                  className={`${classes.middleText}`}
-                >
+                <Grid item xs={2} sm={2} md={2} className={`${classes.middleText}`}>
                   <span>-</span>
                 </Grid>
-                <Grid
-                  item
-                  xs={5}
-                  sm={5}
-                  md={5}
-                  className={`${classes.box} ${classes.numberInput}`}
-                >
-                  <input
-                    type="number"
-                    value={searchNumber[1]}
-                    onChange={(e) => detailNumberChangeHandler(e, 1)}
-                  />
+                <Grid item xs={5} sm={5} md={5} className={`${classes.box} ${classes.numberInput}`}>
+                  <input type="number" value={searchNumber[1]} onChange={(e) => detailNumberChangeHandler(e, 1)} />
                 </Grid>
               </Grid>
             </Grid>
@@ -431,7 +374,10 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                 item
                 xs={12}
                 md={1}
-                sx={{ paddingRight: "15px", paddingBottom: "15px" }}
+                sx={{
+                  paddingRight: "15px",
+                  paddingBottom: "15px",
+                }}
               >
                 <span>타입</span>
               </Grid>
@@ -441,15 +387,19 @@ function DetailSearchBar(props: { showDetail: boolean }) {
                 xs={12}
                 sm={12}
                 md={8}
-                sx={{ display: "flex", justifyContent: "flex-start" }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                }}
               >
                 {typeList.map((type) => {
                   return (
                     <TypeCard
                       key={type.id}
                       name={type.name}
-                      selectedType={selectedType}
-                      setSelectedType={setSelectedType}
+                      selectedType={props.selectedType}
+                      setSelectedType={props.setSelectedType}
+                      resetFlag={resetFlag}
                     />
                   );
                 })}
@@ -457,8 +407,19 @@ function DetailSearchBar(props: { showDetail: boolean }) {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
-          <button onClick={detailSearchButtonHandler}>검색</button>
+        <Grid item className={classes.detailSearchBar}>
+          <Button
+            className={classes.detailSearchButton}
+            onClick={props.searchEventHandler as MouseEventHandler<HTMLButtonElement>}
+          >
+            <span>검색</span>
+          </Button>
+          <Button
+            className={classes.detailResetButton}
+            onClick={resetEventHandler as MouseEventHandler<HTMLButtonElement>}
+          >
+            <span>초기화</span>
+          </Button>
         </Grid>
       </Grid>
     </div>

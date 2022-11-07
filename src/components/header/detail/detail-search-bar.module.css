@@ -102,3 +102,32 @@
 .dropdownBox .selected {
     background: #495057 !important;
 }
+
+.detailSearchBar {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 15px;
+}
+
+.detailSearchBar button {
+    width: 200px;
+    font-size: 18px;
+    transform: skew(-20deg);
+}
+
+.detailSearchBar button span {
+    transform: skew(20deg);
+}
+
+.detailSearchButton {
+    background: #da343c !important;
+    color: white !important;
+}
+
+.detailResetButton {
+    background: #000 !important;
+    color: white !important;
+    margin-left: 20px !important;
+}

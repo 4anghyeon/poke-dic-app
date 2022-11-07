@@ -1,12 +1,8 @@
 
 D
 public/manifest.json,4/2/42e89cd2213b9d5dfae4f63522702c623170d792
-[
-+src/components/header/search-bar.module.css,2/d/2df27821f5c97b157bbc8dbf80ee059acce74b36
 W
 'src/components/header/header.module.css,0/5/05898bd823dc5f4bbd753b83aa1a19a1fd70495a
-A
-public/index.html,f/4/f43ecdf8d666ee908aacce037b4cd72159e4741b
 F
 src/react-app-env.d.ts,4/a/4a7b99bdbee5792679d347b6474463bf5e14b66d
 =
@@ -17,18 +13,12 @@ K
 src/dataTypes/RegionType.ts,b/1/b1c9df669e00fc67c23de5e57bedac74542876f6
 L
 src/dataTypes/AbilityType.ts,0/a/0a5613022a18afbc9874b7462581a82fe62a4d32
-i
-9src/components/header/detail/detail-search-bar.module.css,6/6/6672cff197bf8c089b93e2988c65ed684e1f0c29
 ;
 src/App.css,a/a/aa7165aefcf8ee3d73539e99ab007daf1aa18d8d
-L
-src/dataTypes/PokemonType.ts,c/9/c90b515f04ebcab9d54478185c85a39ed959cfbc
 W
 'src/components/main/type-box.module.css,7/3/73d96fb8070bcd368635b253fb6b916641f047df
 [
 +src/components/main/pokemon-card.module.css,a/1/a12d4497aa293dad166c278a401d313e2586dc12
-S
-#src/components/main/PokemonCard.tsx,b/6/b6c5b3e3734b60d57c38092fcec5d28056bd1513
 O
 src/components/main/TypeBox.tsx,6/1/6110a8caa6e7fff53d6d12a86b95e0cb3e1d1621
 A
@@ -42,8 +32,6 @@ P
  src/dataTypes/PokemonTypeType.ts,9/8/987b970eefc949534ef04111bf535a1df81e228b
 A
 src/translator.ts,7/c/7cd6013b65e4691e228f251beb786fce739ed153
-P
- src/components/header/Header.tsx,9/0/9060a042469f8f70ed376282c1ad114796b79ab6
 ]
 -src/components/main/main-container.module.css,1/c/1cc3dc7e009ec1d1cd7e0d4f02ab7de51bba86c4
 N
@@ -52,7 +40,7 @@ G
 server/PokemonSchema.js,8/e/8e7edd9b163d51df3e909a40215233dea51fd2d2
 9
 	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-B
-src/api/pokeApi.ts,d/f/dfaf9108c1323ab61e60318c4fe02ccfc10e8b41
 ;
 src/App.tsx,8/3/835da56f32df714aaed6285a5b7fc3a7807851e4
+a
+1src/components/header/detail/type-card.module.css,2/1/21b1e17049a2c87a636a49ad44c753aab2c4f560

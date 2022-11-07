@@ -14,4 +14,6 @@ export default interface PokemonType {
   types: {
     type: PokemonTypeType;
   }[];
+  weight?: number;
+  height?: number;
 }

@@ -6,34 +6,28 @@ import { getPokemonById, getPokemonListByIdRange } from "../../api/pokeApi";
 import PokemonType from "../../dataTypes/PokemonType";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  detailSearchFlagState,
+  isLoadingState,
   queryState,
   searchedPokemonListState,
   searchFlagState,
+  startIdState,
 } from "../../state/atomState";
 import { DBPokemonType } from "../../dataTypes/DBPokemonType";
 
 function MainContainer() {
-  const [defaultPokemonList, setDefaultPokemonList] = useState<PokemonType[]>(
-    []
-  );
+  const [defaultPokemonList, setDefaultPokemonList] = useState<PokemonType[]>([]);
 
   const query = useRecoilValue(queryState);
 
   // 검색 버튼 이벤트 발생 여부
   const [searchFlag, setSearchFlag] = useRecoilState(searchFlagState);
-  const [detailSearchFlag, setDetailSearchFlag] = useRecoilState(
-    detailSearchFlagState
-  );
 
   // 검색된 포켓몬 목록 (DB에서 가져옴)
-  const searchedPokemonList = useRecoilValue<DBPokemonType[]>(
-    searchedPokemonListState
-  );
+  const searchedPokemonList = useRecoilValue<DBPokemonType[]>(searchedPokemonListState);
 
-  const [startId, setStartId] = useState(0);
+  const [startId, setStartId] = useRecoilState(startIdState);
   const [isScrollEnd, setIsScrollEnd] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
 
   const mainContainerRef = useRef<HTMLDivElement>(null);
 
@@ -50,25 +44,24 @@ function MainContainer() {
 
   // 포켓몬 목록 불러오기 (첫 로딩)
   const setDisplayPokemonList = (list: PokemonType[]) => {
+    setIsLoading(true);
     setDefaultPokemonList((prev) => [...prev, ...list]);
     setStartId((prev) => prev + 30);
-    setIsLoading(false);
     setIsScrollEnd(false);
   };
 
   // 포켓몬 목록 불러오기 검색 및 스크롤 이벤트 발생 시
   useEffect(() => {
     if ((isScrollEnd && !isLoading) || startId === 0) {
-      setIsLoading(true);
       if (searchedPokemonList.length === 0 && query.length === 0) {
         getPokemonListByIdRange(startId).then((data) => {
           setDisplayPokemonList(data);
+          setIsLoading(false);
         });
       } else {
         let resultPokemonList: PokemonType[] = [];
         let queryData = searchedPokemonList.slice(startId, startId + 30);
         if (queryData.length === 0) {
-          setIsLoading(false);
           setIsScrollEnd(false);
         }
         for (let i = 0; i < queryData.length; i++) {
@@ -76,6 +69,7 @@ function MainContainer() {
             resultPokemonList.push(data);
             if (i === queryData.length - 1) {
               setDisplayPokemonList(resultPokemonList);
+              setIsLoading(false);
             }
           });
         }
@@ -91,24 +85,12 @@ function MainContainer() {
     if (searchFlag) {
       setStartId(0);
       setDefaultPokemonList([]);
-      setIsLoading(true);
     }
 
     return () => {
       setSearchFlag(false);
     };
   }, [searchFlag]);
-
-  useEffect(() => {
-    if (detailSearchFlag) {
-      setStartId(0);
-      setDefaultPokemonList([]);
-      setIsLoading(true);
-    }
-    return () => {
-      setDetailSearchFlag(false);
-    };
-  }, [detailSearchFlag]);
 
   return (
     <Box ref={mainContainerRef}>
@@ -117,13 +99,14 @@ function MainContainer() {
         {defaultPokemonList.map((pokemon) => {
           return <PokemonCard key={pokemon.id} pokemon={pokemon} />;
         })}
-        {defaultPokemonList.length === 0 && (
+        {defaultPokemonList.length === 0 && !isLoading && (
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
+              width: "100%",
               height: "80vh",
             }}
           >
@@ -134,9 +117,7 @@ function MainContainer() {
       </Grid>
       {isLoading && (
         <Grid container>
-          <Box
-            sx={{ width: "100%", marginTop: "100px", marginBottom: "100px" }}
-          >
+          <Box sx={{ width: "100%", marginTop: "100px", marginBottom: "100px" }}>
             <LinearProgress />
           </Box>
         </Grid>

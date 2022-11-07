@@ -25,44 +25,56 @@ app.use(express.json());
 
 app.get("/", (req, res) => res.send("hello world1112"));
 
-app.post("/search", async (req, res) => {
-  const query = req.body.query;
-  console.log(query);
-  await Pokemon.find()
-    .or([
-      { name: { $regex: ".*" + query + ".*" } },
-      { type1: { $regex: ".*" + query + ".*" } },
-      { type2: { $regex: ".*" + query + ".*" } },
-    ])
-    .exec((err, data) => {
-      if (err) {
-        res.send({
-          success: false,
-          message: "error",
-        });
-      }
-      if (data) {
-        res.send({
-          data: data,
-        });
-      }
-    });
-});
+// app.post("/search", async (req, res) => {
+//   const query = req.body.query;
+//   console.log(query);
+//   await Pokemon.find()
+//     .or([
+//       { name: { $regex: ".*" + query + ".*" } },
+//       { type1: { $regex: ".*" + query + ".*" } },
+//       { type2: { $regex: ".*" + query + ".*" } },
+//     ])
+//     .exec((err, data) => {
+//       if (err) {
+//         res.send({
+//           success: false,
+//           message: "error",
+//         });
+//       }
+//       if (data) {
+//         res.send({
+//           data: data,
+//         });
+//       }
+//     });
+// });
 
-app.post("/searchDetail", async (req, res) => {
+app.post("/search", async (req, res) => {
   const query = req.body.query;
   const startNumber = req.body.startNumber;
   const endNumber = req.body.endNumber;
   const selectedType = req.body.selectedType;
   console.log(query, startNumber, endNumber, selectedType);
   await Pokemon.find({
-    name: { $regex: ".*" + query.trim() + ".*" },
     $or: [
+      selectedType.length === 0
+        ? {
+            type1: { $regex: ".*" + query.trim() + ".*" },
+          }
+        : {
+            type1: { $in: selectedType },
+          },
+      selectedType.length === 0
+        ? {
+            type2: { $regex: ".*" + query.trim() + ".*" },
+          }
+        : {
+            type2: { $in: selectedType },
+          },
+    ],
+    $and: [
       {
-        type1: { $regex: ".*" + query.trim() + ".*", $in: selectedType },
-      },
-      {
-        type2: { $regex: ".*" + query.trim() + ".*", $in: selectedType },
+        name: { $regex: ".*" + query.trim() + ".*" },
       },
     ],
   })
@@ -78,6 +90,7 @@ app.post("/searchDetail", async (req, res) => {
       }
       if (data) {
         res.send({
+          success: true,
           data: data,
         });
       }
@@ -103,6 +116,4 @@ app.post("/upsert", async (req, res) => {
   });
 });
 
-app.listen(port, () =>
-  console.log(`poke dic server listening on port ${port} !`)
-);
+app.listen(port, () => console.log(`poke dic server listening on port ${port} !`));

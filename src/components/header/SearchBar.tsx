@@ -2,49 +2,17 @@ import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import classes from "./search-bar.module.css";
 import SearchIcon from "@mui/icons-material/Search";
-import { selector, useRecoilState } from "recoil";
-import {
-  queryState,
-  searchedPokemonListState,
-  searchFlagState,
-  searchNumberState,
-} from "../../state/atomState";
-import PokemonType from "../../dataTypes/PokemonType";
-import { DBPokemonType } from "../../dataTypes/DBPokemonType";
+import { useRecoilState } from "recoil";
+import { queryState } from "../../state/atomState";
 
-function SearchBar() {
+function SearchBar(props: { searchEventHandler: Function }) {
   const [query, setQuery] = useRecoilState(queryState);
-  const [searchedPokemonList, setSearchedPokemonList] = useRecoilState<
-    DBPokemonType[]
-  >(searchedPokemonListState);
 
-  const [searchFlag, setSearchFlag] = useRecoilState(searchFlagState);
-
-  const queryHandler = () => {
-    if (query === "") {
-      setSearchFlag(true);
-      setSearchedPokemonList([]);
-      return;
-    }
-    fetch("http://localhost:3001/search", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: query,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setSearchFlag(true);
-        setSearchedPokemonList(data.data);
-      });
-  };
+  const { searchEventHandler } = props;
 
   const onKeyPressHandler = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      queryHandler();
+      searchEventHandler();
     }
   };
 
@@ -53,7 +21,7 @@ function SearchBar() {
   };
 
   const searchButtonClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    queryHandler();
+    searchEventHandler();
   };
 
   return (
