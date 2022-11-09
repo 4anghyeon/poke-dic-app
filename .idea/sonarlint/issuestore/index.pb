@@ -44,3 +44,17 @@ G
 src/App.tsx,8/3/835da56f32df714aaed6285a5b7fc3a7807851e4
 a
 1src/components/header/detail/type-card.module.css,2/1/21b1e17049a2c87a636a49ad44c753aab2c4f560
+[
++src/components/header/search-bar.module.css,2/d/2df27821f5c97b157bbc8dbf80ee059acce74b36
+;
+.prettierrc,2/0/20137a9e94744624390b6748bc96df5ca1579b71
+i
+9src/components/header/detail/detail-search-bar.module.css,6/6/6672cff197bf8c089b93e2988c65ed684e1f0c29
+?
+server/index.js,e/1/e1a504bc36c43a5b06e18911fe39381356468d7f
+F
+src/state/atomState.ts,e/f/ef8e30a680cbd9cc2194db29c5af6d03afcb6c98
+L
+src/dataTypes/PokemonType.ts,c/9/c90b515f04ebcab9d54478185c85a39ed959cfbc
+S
+#src/dataTypes/PokemonSpeciesType.ts,f/c/fccbb3029b4c8964971140535d02b4105d79f644

@@ -13,6 +13,7 @@ import {
   startIdState,
 } from "../../state/atomState";
 import { DBPokemonType } from "../../dataTypes/DBPokemonType";
+import Modal from "../modal/Modal";
 
 function MainContainer() {
   const [defaultPokemonList, setDefaultPokemonList] = useState<PokemonType[]>([]);
@@ -44,7 +45,6 @@ function MainContainer() {
 
   // 포켓몬 목록 불러오기 (첫 로딩)
   const setDisplayPokemonList = (list: PokemonType[]) => {
-    setIsLoading(true);
     setDefaultPokemonList((prev) => [...prev, ...list]);
     setStartId((prev) => prev + 30);
     setIsScrollEnd(false);
@@ -53,6 +53,7 @@ function MainContainer() {
   // 포켓몬 목록 불러오기 검색 및 스크롤 이벤트 발생 시
   useEffect(() => {
     if ((isScrollEnd && !isLoading) || startId === 0) {
+      setIsLoading(true);
       if (searchedPokemonList.length === 0 && query.length === 0) {
         getPokemonListByIdRange(startId).then((data) => {
           setDisplayPokemonList(data);
@@ -63,6 +64,7 @@ function MainContainer() {
         let queryData = searchedPokemonList.slice(startId, startId + 30);
         if (queryData.length === 0) {
           setIsScrollEnd(false);
+          setIsLoading(false);
         }
         for (let i = 0; i < queryData.length; i++) {
           getPokemonById(queryData[i].number).then((data) => {
@@ -78,7 +80,7 @@ function MainContainer() {
         document.addEventListener("scroll", scrollEventHandler);
       }
     }
-  }, [isScrollEnd, isLoading]);
+  }, [isScrollEnd, searchedPokemonList]);
 
   // 검색 이벤트 발생 알림
   useEffect(() => {
@@ -122,6 +124,7 @@ function MainContainer() {
           </Box>
         </Grid>
       )}
+      <Modal />
     </Box>
   );
 }

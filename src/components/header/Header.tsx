@@ -50,7 +50,7 @@ function Header() {
       .then((res) => res.json())
       .then((data) => {
         if (!data.success) return;
-        if (data.data.length > 0) setIsLoading(true);
+        // if (data.data.length > 0) setIsLoading(true);
         setStartId(0);
         setSearchFlag(true);
         setSearchedPokemonList(data.data);

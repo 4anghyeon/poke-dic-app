@@ -5,11 +5,15 @@ import PokemonType from "../../dataTypes/PokemonType";
 import translator from "../../translator";
 import TypeBox from "./TypeBox";
 import { getPokemonSpecies } from "../../api/pokeApi";
+import reactDom from "react-dom";
+import Modal from "../modal/Modal";
+import ModalPortal from "../modal/ModalPortal";
 
 const onClickShowDetailHandler = (pokemon: PokemonType) => {
   getPokemonSpecies(pokemon.id).then((species) => {
     console.log(species);
     console.log(pokemon);
+    // reactDom.createPortal(<Modal />, el);
   });
 };
 
