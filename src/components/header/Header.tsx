@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import SearchBar from "./SearchBar";
 import classes from "./header.module.css";
 import DetailSearchBar from "./detail/DetailSearchBar";
-import translator from "../../translator";
+import translator from "../../helper/translator";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   isLoadingState,

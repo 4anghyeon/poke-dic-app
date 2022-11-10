@@ -7,6 +7,7 @@ import PokemonType from "../../dataTypes/PokemonType";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   isLoadingState,
+  openModalState,
   queryState,
   searchedPokemonListState,
   searchFlagState,
@@ -31,6 +32,9 @@ function MainContainer() {
   const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
 
   const mainContainerRef = useRef<HTMLDivElement>(null);
+
+  // detail modal
+  const [modalOpen, setModalOpen] = useRecoilState(openModalState);
 
   // 무한 스크롤
   const scrollEventHandler = (e: Event) => {
@@ -124,7 +128,7 @@ function MainContainer() {
           </Box>
         </Grid>
       )}
-      <Modal />
+      {modalOpen && <Modal />}
     </Box>
   );
 }

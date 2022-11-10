@@ -4,7 +4,7 @@ import { Button, Grid } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TypeCard from "./TypeCard";
 import RegionType from "../../../dataTypes/RegionType";
-import translator from "../../../translator";
+import translator from "../../../helper/translator";
 import { getAbilities, getRegionList, getTypes } from "../../../api/pokeApi";
 import { AbilityType } from "../../../dataTypes/AbilityType";
 import PokemonTypeType from "../../../dataTypes/PokemonTypeType";

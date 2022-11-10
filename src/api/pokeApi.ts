@@ -1,5 +1,5 @@
 import RegionType from "../dataTypes/RegionType";
-import translator from "../translator";
+import translator from "../helper/translator";
 import { NamesType } from "../dataTypes/NamesType";
 import { AbilityType } from "../dataTypes/AbilityType";
 import PokemonTypeType from "../dataTypes/PokemonTypeType";

@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { Grid } from "@mui/material";
 import classes from "./type-card.module.css";
-import translator from "../../../translator";
+import translator from "../../../helper/translator";
 
 function TypeCard(props: {
   name: string;
