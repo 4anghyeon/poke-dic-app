@@ -163,6 +163,8 @@ function DetailSearchBar(props: {
     setSearchNumber([1, 905]);
     props.setSelectedType([]);
     setResetFlag(!resetFlag);
+    setSelectedAbility("all");
+    setSelectedRegion("all");
   };
 
   return (

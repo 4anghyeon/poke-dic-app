@@ -11,4 +11,5 @@ export interface PokemonSpeciesType {
       name: string;
     };
   }[];
+  gender_rate?: number;
 }

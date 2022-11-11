@@ -50,27 +50,23 @@ i
 package.json,7/0/7030d0b2f71b999ff89a343de08c414af32fc93a
 S
 #src/components/header/SearchBar.tsx,8/3/83f0f2106775d613237f901e1fb0e1de7c2b9655
-B
-src/api/pokeApi.ts,d/f/dfaf9108c1323ab61e60318c4fe02ccfc10e8b41
 T
 $src/components/modal/ModalPortal.tsx,b/9/b9dc937764135011784e7edb565e33e9c1ba0cd1
 A
 public/index.html,f/4/f43ecdf8d666ee908aacce037b4cd72159e4741b
-S
-#src/dataTypes/PokemonSpeciesType.ts,f/c/fccbb3029b4c8964971140535d02b4105d79f644
 [
 +src/components/main/pokemon-card.module.css,a/1/a12d4497aa293dad166c278a401d313e2586dc12
-F
-src/state/atomState.ts,e/f/ef8e30a680cbd9cc2194db29c5af6d03afcb6c98
 P
  src/components/header/Header.tsx,9/0/9060a042469f8f70ed376282c1ad114796b79ab6
 H
 src/helper/translator.ts,4/e/4e1b940915ee3f6ff75226efc19d8832576b60e9
 M
 src/helper/typeColorFinder.ts,2/0/201403f005861e9e4c130fbe5289bd95b5eee077
-`
-0src/components/header/detail/DetailSearchBar.tsx,4/b/4b29083a785dd9650becb4fcd47babb9b75ed5ca
-L
-src/dataTypes/PokemonType.ts,c/9/c90b515f04ebcab9d54478185c85a39ed959cfbc
 Y
 )src/components/header/detail/TypeCard.tsx,1/1/116a0766199503ea840b686588354334ad10a1d6
+O
+src/components/main/TypeBox.tsx,6/1/6110a8caa6e7fff53d6d12a86b95e0cb3e1d1621
+U
+%src/components/main/MainContainer.tsx,e/7/e7e8517a6091a90e4a6571120b60511f53606ba1
+`
+0src/components/header/detail/DetailSearchBar.tsx,4/b/4b29083a785dd9650becb4fcd47babb9b75ed5ca

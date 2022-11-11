@@ -16,4 +16,9 @@ export default interface PokemonType {
   }[];
   weight?: number;
   height?: number;
+  abilities?: {
+    ability: {
+      name: string;
+    };
+  }[];
 }

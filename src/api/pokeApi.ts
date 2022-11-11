@@ -135,7 +135,7 @@ export const getPokemonById = async (id: number) => {
       result.types = data.types;
       result.height = data.height;
       result.weight = data.weight;
-
+      result.abilities = data.abilities;
       // await fetch("http://localhost:3001/upsert", {
       //   method: "POST",
       //   headers: {

@@ -17,14 +17,20 @@ function Modal() {
       <div className={classes.modal}>
         <div className={classes.modalBackground} onClick={() => setModalOpen(false)}></div>
         <div className={classes.modalContent}>
-          <Grid container>
-            <Grid item lg={6} sx={{ display: "flex", justifyContent: "center", padding: "10px" }}>
+          <Grid container sx={{ width: "100%" }}>
+            <Grid item lg={6} sx={{ display: "flex", justifyContent: "center", padding: "50px", width: "100%" }}>
               <img
                 src={selectedPokemon.pokemon.sprites.other["official-artwork"].front_default}
                 alt={selectedPokemon.pokemon.name}
               />
             </Grid>
-            <Grid container item lg={6} className={classes.contentBox} sx={{ paddingRight: "20px" }}>
+            <Grid
+              container
+              item
+              lg={6}
+              className={classes.contentBox}
+              sx={{ paddingLeft: "20px", paddingRight: "20px" }}
+            >
               <div className={classes.numberBox}>
                 <span>No. {selectedPokemon.pokemon.id.toString().padStart(3, "0")}</span>
               </div>
@@ -61,12 +67,28 @@ function Modal() {
                 <Grid container className={classes.lineBox}>
                   <Grid item xs={4} sm={4} md={4} lg={4}>
                     <h4>성별</h4>
+                    {selectedPokemon.pokemonSpecies.gender_rate === 0 ? (
+                      <span>남</span>
+                    ) : selectedPokemon.pokemonSpecies.gender_rate === 8 ? (
+                      <span>여</span>
+                    ) : (
+                      <div>
+                        <span>남</span>
+                        <span>여</span>
+                      </div>
+                    )}
                   </Grid>
                   <Grid item xs={4} sm={4} md={4} lg={4}>
-                    <h4>몸무게</h4>
+                    <h4>분류</h4>
+                    <span>{selectedPokemon.pokemonSpecies.genera.find((g) => g.language.name === "ko")!.genus}</span>
                   </Grid>
                   <Grid item xs={4} sm={4} md={4} lg={4}>
                     <h4>특성</h4>
+                    {selectedPokemon.pokemon.abilities!.map((a) => (
+                      <div key={a.ability.name} style={{ marginBottom: "5px" }}>
+                        {a.ability.name}
+                      </div>
+                    ))}
                   </Grid>
                 </Grid>
               </div>
