@@ -1,12 +1,12 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
+import React, { ChangeEvent } from "react";
 import { Box, Button } from "@mui/material";
 import classes from "./search-bar.module.css";
 import SearchIcon from "@mui/icons-material/Search";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { queryState } from "../../state/atomState";
 
 function SearchBar(props: { searchEventHandler: Function }) {
-  const [query, setQuery] = useRecoilState(queryState);
+  const setQuery = useSetRecoilState(queryState);
 
   const { searchEventHandler } = props;
 
@@ -20,7 +20,7 @@ function SearchBar(props: { searchEventHandler: Function }) {
     setQuery(e.target.value.trimEnd());
   };
 
-  const searchButtonClickHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const searchButtonClickHandler = (_e: React.MouseEvent<HTMLButtonElement>) => {
     searchEventHandler();
   };
 

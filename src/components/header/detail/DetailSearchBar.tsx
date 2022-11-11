@@ -10,7 +10,6 @@ import { AbilityType } from "../../../dataTypes/AbilityType";
 import PokemonTypeType from "../../../dataTypes/PokemonTypeType";
 import { useRecoilState } from "recoil";
 import { searchNumberState } from "../../../state/atomState";
-import SearchIcon from "@mui/icons-material/Search";
 
 // 지방 리스트 불러오기 API
 

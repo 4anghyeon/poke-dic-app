@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import classes from "./type-card.module.css";
 import translator from "../../../helper/translator";
@@ -11,7 +11,7 @@ function TypeCard(props: {
 }) {
   const [check, setCheck] = useState(false);
   const { name, selectedType, setSelectedType, resetFlag } = props;
-  const onClickTypeHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+  const onClickTypeHandler = (_e: React.MouseEvent<HTMLDivElement>) => {
     if (selectedType.includes(name)) {
       setSelectedType((prev) => prev.filter((d) => d !== name));
       setCheck(false);

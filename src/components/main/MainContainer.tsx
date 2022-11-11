@@ -34,7 +34,7 @@ function MainContainer() {
   const mainContainerRef = useRef<HTMLDivElement>(null);
 
   // detail modal
-  const [modalOpen, setModalOpen] = useRecoilState(openModalState);
+  const modalOpen = useRecoilValue(openModalState);
 
   // 무한 스크롤
   const scrollEventHandler = (e: Event) => {

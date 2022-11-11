@@ -1,18 +1,18 @@
 import React from "react";
-import { Box, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import classes from "./pokemon-card.module.css";
 import PokemonType from "../../dataTypes/PokemonType";
 import translator from "../../helper/translator";
 import TypeBox from "./TypeBox";
 import { getPokemonSpecies } from "../../api/pokeApi";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { openModalState, selectedPokemonState } from "../../state/atomState";
 import { PokemonSpeciesType } from "../../dataTypes/PokemonSpeciesType";
 
 function PokemonCard(props: { pokemon: PokemonType }) {
   const { pokemon } = props;
-  const [modalOpen, setModalOpen] = useRecoilState(openModalState);
-  const [selectedPokemon, setSelectedPokemon] = useRecoilState(selectedPokemonState);
+  const setModalOpen = useSetRecoilState(openModalState);
+  const setSelectedPokemon = useSetRecoilState(selectedPokemonState);
 
   const onClickShowDetailHandler = (pokemon: PokemonType) => {
     getPokemonSpecies(pokemon.id).then((species) => {

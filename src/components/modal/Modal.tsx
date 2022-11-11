@@ -1,16 +1,15 @@
 import React from "react";
 import ModalPortal from "./ModalPortal";
 import classes from "./modal.module.css";
-import { useRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { openModalState, selectedPokemonState } from "../../state/atomState";
 import translator from "../../helper/translator";
 import { Grid } from "@mui/material";
-import TypeBox from "../main/TypeBox";
 import SmallTypeBox from "./SmallTypeBox";
 
 function Modal() {
-  const [modalOpen, setModalOpen] = useRecoilState(openModalState);
-  const [selectedPokemon, setSelectedPokemon] = useRecoilState(selectedPokemonState);
+  const setModalOpen = useSetRecoilState(openModalState);
+  const selectedPokemon = useRecoilValue(selectedPokemonState);
 
   return (
     <ModalPortal>

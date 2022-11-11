@@ -55,29 +55,16 @@ app.post("/search", async (req, res) => {
   const endNumber = req.body.endNumber;
   const selectedType = req.body.selectedType;
   console.log(query, startNumber, endNumber, selectedType);
-  await Pokemon.find({
-    $or: [
-      selectedType.length === 0
-        ? {
-            type1: { $regex: ".*" + query.trim() + ".*" },
-          }
-        : {
-            type1: { $in: selectedType },
-          },
-      selectedType.length === 0
-        ? {
-            type2: { $regex: ".*" + query.trim() + ".*" },
-          }
-        : {
-            type2: { $in: selectedType },
-          },
-    ],
-    $and: [
-      {
-        name: { $regex: ".*" + query.trim() + ".*" },
-      },
-    ],
-  })
+
+  const queryObject = {
+    name: { $regex: ".*" + query.trim() + ".*" },
+  };
+
+  if (selectedType.length > 0) {
+    queryObject["$or"] = [{ type1: { $in: selectedType } }, { type2: { $in: selectedType } }];
+  }
+
+  await Pokemon.find(queryObject)
     .where("number")
     .gte(startNumber)
     .lte(endNumber)
@@ -99,8 +86,8 @@ app.post("/search", async (req, res) => {
 
 app.post("/upsert", async (req, res) => {
   const pokemon = new Pokemon({
-    number: req.body.id, // 유저 스키마의 아이디 (_id)
-    name: req.body.name, // 댓글 내용
+    number: req.body.id,
+    name: req.body.name,
     type1: req.body.type1,
     type2: req.body.type2 || null,
   });

@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from "react";
+import React from "react";
 import { createPortal } from "react-dom";
 
 function ModalPortal(props: { children: React.ReactNode }) {

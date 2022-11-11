@@ -4,9 +4,8 @@ import SearchBar from "./SearchBar";
 import classes from "./header.module.css";
 import DetailSearchBar from "./detail/DetailSearchBar";
 import translator from "../../helper/translator";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import {
-  isLoadingState,
   queryState,
   searchedPokemonListState,
   searchFlagState,
@@ -17,19 +16,18 @@ import { DBPokemonType } from "../../dataTypes/DBPokemonType";
 
 function Header() {
   const [showDetail, setShowDetail] = useState(false);
-  const [isLoading, setIsLoading] = useRecoilState(isLoadingState);
 
   const onClickDetailToggleHandler = () => {
     setShowDetail(!showDetail);
   };
 
   const query = useRecoilValue(queryState);
-  const [searchFlag, setSearchFlag] = useRecoilState(searchFlagState);
+  const setSearchFlag = useSetRecoilState(searchFlagState);
 
-  const [searchedPokemonList, setSearchedPokemonList] = useRecoilState<DBPokemonType[]>(searchedPokemonListState);
+  const setSearchedPokemonList = useSetRecoilState<DBPokemonType[]>(searchedPokemonListState);
 
-  const [searchNumber, setSearchNumber] = useRecoilState<number[]>(searchNumberState);
-  const [startId, setStartId] = useRecoilState(startIdState);
+  const searchNumber = useRecoilValue<number[]>(searchNumberState);
+  const setStartId = useSetRecoilState(startIdState);
 
   const [selectedType, setSelectedType] = useState<string[]>([]);
 
@@ -50,7 +48,6 @@ function Header() {
       .then((res) => res.json())
       .then((data) => {
         if (!data.success) return;
-        // if (data.data.length > 0) setIsLoading(true);
         setStartId(0);
         setSearchFlag(true);
         setSearchedPokemonList(data.data);

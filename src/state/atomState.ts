@@ -1,7 +1,6 @@
 import { atom } from "recoil";
 import { DBPokemonType } from "../dataTypes/DBPokemonType";
 import PokemonType from "../dataTypes/PokemonType";
-import PokemonTypeType from "../dataTypes/PokemonTypeType";
 import { PokemonSpeciesType } from "../dataTypes/PokemonSpeciesType";
 
 export const searchedPokemonListState = atom<DBPokemonType[]>({
