@@ -29,7 +29,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3000 react-scripts --max_old_space_size=1024 start",
     "build": "react-scripts build",
     "backend": "nodemon server/index.js",
     "test": "react-scripts test",
