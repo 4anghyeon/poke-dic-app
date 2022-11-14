@@ -33,7 +33,7 @@ function Header() {
 
   // 검색 알림 이벤트
   const searchEventHandler = () => {
-    fetch("http://localhost:3001/search", {
+    fetch("/api/search", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

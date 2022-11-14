@@ -49,7 +49,7 @@ app.get("/", (req, res) => res.send("hello world1112"));
 //     });
 // });
 
-app.post("/search", async (req, res) => {
+app.post("/api/search", async (req, res) => {
   const query = req.body.query;
   const startNumber = req.body.startNumber;
   const endNumber = req.body.endNumber;
